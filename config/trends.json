@@ -1,0 +1,34 @@
+{
+  "_nota": "Grupos de até 4 termos + a âncora do idioma (o Google Trends compara no máximo 5 por consulta). A âncora entra em todos os grupos para os números ficarem comparáveis entre grupos. PT mede buscas no Brasil; EN mede buscas nos EUA.",
+  "pt": {
+    "geo": "BR", "hl": "pt-BR", "tz": 180, "ancora": "agronegócio",
+    "grupos": [
+      {"id": "graos", "nome": "Grãos", "termos": ["soja", "milho", "trigo", "feijão"]},
+      {"id": "precos", "nome": "Preços", "termos": ["preço da soja", "preço do milho", "preço do boi", "preço do café"]},
+      {"id": "pecuaria", "nome": "Pecuária", "termos": ["boi gordo", "arroba do boi", "frango", "suínos"]},
+      {"id": "investir", "nome": "Investir no agro", "termos": ["fiagro", "terras agrícolas", "LCA", "CRA"]},
+      {"id": "cafe_acucar", "nome": "Café, açúcar e etanol", "termos": ["café", "açúcar", "etanol", "cana-de-açúcar"]},
+      {"id": "clima", "nome": "Clima e safra", "termos": ["safra", "El Niño", "La Niña", "seca"]},
+      {"id": "logistica", "nome": "Logística e exportação", "termos": ["porto de santos", "frete", "exportação", "paranaguá"]},
+      {"id": "fontes", "nome": "Fontes oficiais", "termos": ["conab", "ibge", "embrapa", "usda"]},
+      {"id": "insumos", "nome": "Insumos", "termos": ["fertilizantes", "adubo", "defensivos", "glifosato"]},
+      {"id": "credito", "nome": "Crédito rural", "termos": ["crédito rural", "plano safra", "recuperação judicial", "pronaf"]},
+      {"id": "outros", "nome": "Outras culturas", "termos": ["algodão", "laranja", "cacau", "eucalipto"]},
+      {"id": "geozion", "nome": "Marca e concorrência", "termos": ["geozion", "mapbiomas", "notícias agrícolas", "canal rural"]}
+    ]
+  },
+  "en": {
+    "geo": "US", "hl": "en-US", "tz": 300, "ancora": "farmland",
+    "grupos": [
+      {"id": "brazil", "nome": "Brazil ag", "termos": ["brazil soybeans", "brazil corn", "brazil coffee", "brazil beef"]},
+      {"id": "farmland", "nome": "Farmland investing", "termos": ["farmland investing", "farmland reit", "farmland prices", "agriculture etf"]},
+      {"id": "grains", "nome": "Grain prices", "termos": ["soybean prices", "corn prices", "wheat prices", "wasde"]},
+      {"id": "trade", "nome": "Trade and China", "termos": ["soybean exports", "china soybeans", "soybean tariffs", "grain exports"]},
+      {"id": "livestock", "nome": "Livestock", "termos": ["cattle prices", "beef prices", "chicken prices", "hog prices"]},
+      {"id": "softs", "nome": "Softs", "termos": ["coffee prices", "sugar prices", "cocoa prices", "orange juice prices"]},
+      {"id": "weather", "nome": "Weather and crops", "termos": ["la nina", "el nino", "drought monitor", "crop progress"]},
+      {"id": "agstocks", "nome": "Ag stocks and inputs", "termos": ["fertilizer prices", "deere stock", "adm stock", "bunge stock"]},
+      {"id": "brinvest", "nome": "Investing in Brazil", "termos": ["invest in brazil", "brazil etf", "brazilian real", "ewz"]}
+    ]
+  }
+}

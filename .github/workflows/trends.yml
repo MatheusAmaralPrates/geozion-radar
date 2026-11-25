@@ -1,0 +1,21 @@
+name: Monitor de buscas (Google Trends, semanal)
+on:
+  schedule:
+    - cron: '23 10 * * 1'   # segunda, 7h23 em Brasília
+  workflow_dispatch:
+concurrency: { group: trends, cancel-in-progress: false }
+jobs:
+  coleta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests==2.32.3
+      - name: Coletar Google Trends e gravar no KV
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_KV_ID: ${{ secrets.CF_KV_ID }}
+        run: python tools/trends/coletor.py
