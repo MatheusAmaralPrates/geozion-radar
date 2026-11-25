@@ -1,7 +1,7 @@
 name: Radar marítimo (AIS a cada 15 min)
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '7,22,37,52 * * * *'   # minutos fora do topo da hora: o GitHub descarta menos
   workflow_dispatch:
 concurrency: { group: ais, cancel-in-progress: false }
 jobs:
