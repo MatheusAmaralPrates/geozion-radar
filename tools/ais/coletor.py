@@ -47,7 +47,19 @@ async def escuta(navios):
     sub = {'APIKey': os.environ['AISSTREAM_KEY'], 'BoundingBoxes': [a['bbox'] for a in AREAS],
            'FilterMessageTypes': ['PositionReport', 'ShipStaticData', 'StandardClassBPositionReport']}
     fim, n = time.time() + DUR, 0
-    async with websockets.connect('wss://stream.aisstream.io/v0/stream', compression='deflate', max_size=2**22) as ws:
+    for tentativa in range(4):                      # o aisstream às vezes demora a aceitar a conexão
+        try:
+            n += await _escuta_ws(websockets, sub, fim, navios)
+            break
+        except (asyncio.TimeoutError, asyncio.CancelledError, OSError, websockets.exceptions.WebSocketException) as e:
+            print(f'conexão aisstream falhou (tentativa {tentativa + 1}): {type(e).__name__}')
+            if time.time() > fim - 20: break
+            await asyncio.sleep(5 * (tentativa + 1))
+    return n
+
+async def _escuta_ws(websockets, sub, fim, navios):
+    n = 0
+    async with websockets.connect('wss://stream.aisstream.io/v0/stream', compression='deflate', max_size=2**22, open_timeout=40, ping_interval=20) as ws:
         await ws.send(json.dumps(sub))
         while time.time() < fim:
             try: msg = json.loads(await asyncio.wait_for(ws.recv(), timeout=max(1, fim - time.time())))
