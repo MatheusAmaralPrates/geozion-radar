@@ -1,0 +1,25 @@
+{
+ "_comentario": "Áreas do radar marítimo. bbox = [[lat_sul, lon_oeste], [lat_norte, lon_leste]], já incluindo a área de fundeio. tipo porto = mede fila (fundeados) e atracados; tipo gargalo = mede navios em trânsito.",
+ "areas": [
+  {"id": "santos", "g": "br", "tipo": "porto", "nome": {"pt": "Santos", "en": "Santos"}, "uf": "SP", "bbox": [[-24.20, -46.45], [-23.88, -46.18]]},
+  {"id": "paranagua", "g": "br", "tipo": "porto", "nome": {"pt": "Paranaguá", "en": "Paranaguá"}, "uf": "PR", "bbox": [[-25.70, -48.55], [-25.40, -48.15]]},
+  {"id": "riogrande", "g": "br", "tipo": "porto", "nome": {"pt": "Rio Grande", "en": "Rio Grande"}, "uf": "RS", "bbox": [[-32.35, -52.20], [-31.95, -51.85]]},
+  {"id": "itaqui", "g": "br", "tipo": "porto", "nome": {"pt": "São Luís · Itaqui", "en": "São Luís · Itaqui"}, "uf": "MA", "bbox": [[-2.75, -44.50], [-2.10, -44.10]]},
+  {"id": "barcarena", "g": "br", "tipo": "porto", "nome": {"pt": "Barcarena · Vila do Conde", "en": "Barcarena · Vila do Conde"}, "uf": "PA", "bbox": [[-1.70, -48.85], [-1.35, -48.50]]},
+  {"id": "santarem", "g": "br", "tipo": "porto", "nome": {"pt": "Santarém", "en": "Santarém"}, "uf": "PA", "bbox": [[-2.50, -54.80], [-2.36, -54.62]]},
+  {"id": "xangai", "g": "cn", "tipo": "porto", "nome": {"pt": "Xangai (Yangshan e Wusong)", "en": "Shanghai (Yangshan and Wusong)"}, "bbox": [[30.45, 121.80], [31.50, 122.45]]},
+  {"id": "ningbo", "g": "cn", "tipo": "porto", "nome": {"pt": "Ningbo-Zhoushan", "en": "Ningbo-Zhoushan"}, "bbox": [[29.70, 121.70], [30.20, 122.40]]},
+  {"id": "shenzhen", "g": "cn", "tipo": "porto", "nome": {"pt": "Shenzhen (Yantian e Shekou)", "en": "Shenzhen (Yantian and Shekou)"}, "bbox": [[22.20, 113.75], [22.65, 114.40]]},
+  {"id": "qingdao", "g": "cn", "tipo": "porto", "nome": {"pt": "Qingdao", "en": "Qingdao"}, "bbox": [[35.90, 120.10], [36.15, 120.50]]},
+  {"id": "dalian", "g": "cn", "tipo": "porto", "nome": {"pt": "Dalian", "en": "Dalian"}, "bbox": [[38.85, 121.55], [39.05, 122.00]]},
+  {"id": "panama", "g": "rota", "tipo": "gargalo", "nome": {"pt": "Canal do Panamá", "en": "Panama Canal"}, "bbox": [[8.80, -80.10], [9.45, -79.40]]},
+  {"id": "suez", "g": "rota", "tipo": "gargalo", "nome": {"pt": "Canal de Suez", "en": "Suez Canal"}, "bbox": [[29.80, 32.25], [31.35, 32.65]]},
+  {"id": "babelmandeb", "g": "rota", "tipo": "gargalo", "nome": {"pt": "Mar Vermelho · Bab el-Mandeb", "en": "Red Sea · Bab el-Mandeb"}, "bbox": [[12.30, 43.10], [13.00, 43.60]]},
+  {"id": "cabo", "g": "rota", "tipo": "gargalo", "nome": {"pt": "Cabo da Boa Esperança", "en": "Cape of Good Hope"}, "bbox": [[-35.50, 17.50], [-33.50, 21.00]]},
+  {"id": "malaca", "g": "rota", "tipo": "gargalo", "nome": {"pt": "Estreito de Malaca · Singapura", "en": "Malacca Strait · Singapore"}, "bbox": [[1.10, 103.40], [1.40, 104.20]]},
+  {"id": "lalb", "g": "eua", "tipo": "porto", "nome": {"pt": "Los Angeles · Long Beach", "en": "Los Angeles · Long Beach"}, "bbox": [[33.55, -118.35], [33.80, -118.05]]},
+  {"id": "golfo", "g": "eua", "tipo": "porto", "nome": {"pt": "Golfo dos EUA (Mississippi)", "en": "US Gulf (Mississippi)"}, "bbox": [[29.00, -90.50], [30.10, -89.20]]},
+  {"id": "roterda", "g": "eua", "tipo": "porto", "nome": {"pt": "Roterdã", "en": "Rotterdam"}, "bbox": [[51.85, 3.60], [52.05, 4.35]]},
+  {"id": "antuerpia", "g": "eua", "tipo": "porto", "nome": {"pt": "Antuérpia", "en": "Antwerp"}, "bbox": [[51.20, 3.95], [51.45, 4.45]]}
+ ]
+}
