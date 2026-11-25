@@ -1,0 +1,25 @@
+name: Baixar dados públicos (arquivo temporário)
+# Baixa arquivos de fontes oficiais (ANA, IBGE, MapBiomas...) e os entrega como artefato da execução,
+# para serem processados no pipeline do Monitor. Não grava nada no repositório.
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'URLs separadas por espaço'
+        required: true
+jobs:
+  baixar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Baixar
+        env: { URLS: '${{ inputs.urls }}' }
+        run: |
+          mkdir -p out && cd out
+          for u in $URLS; do
+            f=$(basename "${u%%\?*}")
+            echo "-> $u"
+            curl -fsSL --retry 3 -A "Mozilla/5.0" -o "$f" "$u" && ls -la "$f" || echo "FALHOU $u"
+          done
+      - uses: actions/upload-artifact@v4
+        with: { name: dados, path: out, retention-days: 3 }
