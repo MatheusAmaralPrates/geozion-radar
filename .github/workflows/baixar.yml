@@ -1,12 +1,14 @@
 name: Baixar dados públicos (arquivo temporário)
 # Baixa arquivos de fontes oficiais (ANA, IBGE, MapBiomas...) e os entrega como artefato da execução,
-# para serem processados no pipeline do Monitor. Não grava nada no repositório.
+# para serem processados no pipeline do Monitor. Também grava os arquivos no ramo 'dados-brutos' (sobrescrito a cada execução).
 on:
   workflow_dispatch:
     inputs:
       urls:
         description: 'URLs separadas por espaço'
         required: true
+permissions:
+  contents: write
 jobs:
   baixar:
     runs-on: ubuntu-latest
@@ -23,3 +25,9 @@ jobs:
           done
       - uses: actions/upload-artifact@v4
         with: { name: dados, path: out, retention-days: 3 }
+      - name: Gravar no ramo dados-brutos
+        run: |
+          cd out
+          git init -q -b dados-brutos && git add -A
+          git -c user.name=geozion-bot -c user.email=bot@geozion.invalid commit -qm "dados brutos $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" dados-brutos
