@@ -1,0 +1,22 @@
+name: Radar marítimo (AIS a cada 15 min)
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+concurrency: { group: ais, cancel-in-progress: false }
+jobs:
+  coleta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install websockets==13.1
+      - name: Coletar posições e gravar no KV
+        env:
+          AISSTREAM_KEY: ${{ secrets.AISSTREAM_KEY }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_KV_ID: ${{ secrets.CF_KV_ID }}
+        run: python tools/ais/coletor.py
