@@ -1,22 +1,32 @@
 name: Radar marítimo (AIS a cada 15 min)
+# Ciclo contínuo: cada execução coleta a cada 15 min por ~5h40 e, no fim, dispara a próxima.
+# O agendamento abaixo é só reserva: se o ciclo parar, ele religa em até 1 hora.
 on:
   schedule:
-    - cron: '7,22,37,52 * * * *'   # minutos fora do topo da hora: o GitHub descarta menos
+    - cron: '7 * * * *'
   workflow_dispatch:
+permissions:
+  actions: write
+  contents: read
 concurrency: { group: ais, cancel-in-progress: false }
 jobs:
   coleta:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - run: pip install websockets==13.1
-      - name: Coletar posições e gravar no KV
+      - name: Coletar posições a cada 15 min e gravar no KV
         env:
           AISSTREAM_KEY: ${{ secrets.AISSTREAM_KEY }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_KV_ID: ${{ secrets.CF_KV_ID }}
-        run: python tools/ais/coletor.py
+        run: python tools/ais/ciclo.py
+      - name: Disparar o próximo ciclo
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ais.yml --repo ${{ github.repository }} --ref main
