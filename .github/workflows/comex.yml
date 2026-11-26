@@ -1,0 +1,32 @@
+name: comex
+on:
+  workflow_dispatch:
+    inputs:
+      prefixo: { description: 'prefixo NCM', default: '0306' }
+      anos: { description: 'anos', default: '2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 2026' }
+permissions: { contents: write }
+jobs:
+  baixar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Baixar e filtrar
+        env: { P: '${{ inputs.prefixo }}', A: '${{ inputs.anos }}' }
+        run: |
+          mkdir -p out
+          for fl in EXP IMP; do
+            for y in $A; do
+              u="https://balanca.economia.gov.br/balanca/bd/comexstat-bd/ncm/${fl}_${y}.csv"
+              echo "-> $u"
+              curl -fsSL --retry 3 -A "Mozilla/5.0" "$u" | grep -E "^\"?[0-9]{4}\"?;\"?[0-9]+\"?;\"?${P}" >> out/${fl}_${P}.csv || echo "FALHOU $u"
+            done
+          done
+          curl -fsSL -A "Mozilla/5.0" -o out/PAIS.csv https://balanca.economia.gov.br/balanca/bd/tabelas/PAIS.csv || true
+          curl -fsSL -A "Mozilla/5.0" -o out/NCM.csv https://balanca.economia.gov.br/balanca/bd/tabelas/NCM.csv || true
+          wc -l out/*
+      - name: Gravar
+        run: |
+          cd out
+          git init -q -b dados-brutos && git add -A
+          git -c user.name=geozion-bot -c user.email=bot@geozion.invalid commit -qm "comex $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" dados-brutos
