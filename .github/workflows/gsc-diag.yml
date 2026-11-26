@@ -1,0 +1,16 @@
+name: Search Console (diagnóstico de indexação)
+on:
+  workflow_dispatch:
+    inputs:
+      urls: { description: 'URLs separadas por espaço (vazio = padrão)', default: '' }
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install google-auth==2.35.0 requests==2.32.3
+      - env: { GSC_SA_JSON: '${{ secrets.GSC_SA_JSON }}', URLS: '${{ inputs.urls }}' }
+        run: python tools/gsc/diag.py $URLS
