@@ -57,7 +57,7 @@ def main():
     if not site:
         raise SystemExit(f'A conta de serviço {email} não vê a propriedade geozion.com.br no Search Console (vê: {sites}). '
                          'Adicione esse e-mail como usuário em Search Console > Configurações > Usuários e permissões.')
-    hoje = dt.date.today(); fim = hoje - dt.timedelta(days=2)
+    hoje = dt.date.today(); fim = hoje  # dataState=all já traz os dias recentes (preliminares)
     d = lambda n: (fim - dt.timedelta(days=n)).isoformat()
     ini90, ini28, ini56 = d(89), d(27), d(55)
     out = {'gerado': int(time.time()), 'site': site, 'fim': fim.isoformat(), 'janela': [ini28, fim.isoformat()], 'anterior': [ini56, d(28)]}
@@ -77,7 +77,7 @@ def main():
     out['desde'] = total[0]['keys'][0] if total else None
     out['acumulado'] = tot(total)
     txt = json.dumps(out, ensure_ascii=False, separators=(',', ':'))
-    print(f"{site}: 28d {out['todos']['atual']} · anterior {out['todos']['anterior']} · {len(txt)} bytes")
+    print(f"{site}: 28d {out['todos']['atual']} · anterior {out['todos']['anterior']} · acumulado {out['acumulado']} desde {out['desde']} · dias {len(out['todos']['dia'])} · {len(txt)} bytes")
     if SECO: print(txt[:1500]); return
     kv('PUT', 'gsc:snap', txt)
 
