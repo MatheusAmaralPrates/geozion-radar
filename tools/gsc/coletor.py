@@ -54,6 +54,17 @@ def linhas(rows, chave):
 def main():
     s, email = sessao()
     site, sites = propriedade(s)
+    snap = coleta(s, email, site, sites)
+    # domínio americano (geozion.com): propriedade separada no Search Console
+    if 'sc-domain:geozion.com' in sites:
+        com = coleta(s, email, 'sc-domain:geozion.com', sites)
+        if com: snap['com'] = {k: com[k] for k in ('site', 'fim', 'todos', 'desde', 'acumulado')}
+        print('geozion.com:', snap.get('com', {}).get('todos', {}).get('atual'))
+    txt = json.dumps(snap, ensure_ascii=False, separators=(',', ':'))
+    if SECO: print(txt[:1500]); return
+    kv('PUT', 'gsc:snap', txt)
+
+def coleta(s, email, site, sites):
     if not site:
         raise SystemExit(f'A conta de serviço {email} não vê a propriedade geozion.com.br no Search Console (vê: {sites}). '
                          'Adicione esse e-mail como usuário em Search Console > Configurações > Usuários e permissões.')
@@ -76,10 +87,8 @@ def main():
     total = consulta(s, site, '2020-01-01', fim.isoformat(), ['date'])
     out['desde'] = total[0]['keys'][0] if total else None
     out['acumulado'] = tot(total)
-    txt = json.dumps(out, ensure_ascii=False, separators=(',', ':'))
-    print(f"{site}: 28d {out['todos']['atual']} · anterior {out['todos']['anterior']} · acumulado {out['acumulado']} desde {out['desde']} · dias {len(out['todos']['dia'])} · {len(txt)} bytes")
-    if SECO: print(txt[:1500]); return
-    kv('PUT', 'gsc:snap', txt)
+    print(f"{site}: 28d {out['todos']['atual']} · anterior {out['todos']['anterior']} · acumulado {out['acumulado']} desde {out['desde']} · dias {len(out['todos']['dia'])}")
+    return out
 
 if __name__ == '__main__':
     main()
