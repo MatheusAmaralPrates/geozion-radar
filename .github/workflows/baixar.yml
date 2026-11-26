@@ -20,7 +20,7 @@ jobs:
           mkdir -p out && cd out
           i=0
           for u in $URLS; do
-            i=$((i+1)); f="${i}_$(basename "${u%%\?*}")"
+            [ $i -gt 0 ] && sleep 4; i=$((i+1)); f="${i}_$(basename "${u%%\?*}")"
             echo "-> $u"
             curl -fsSL --retry 3 -A "Mozilla/5.0" -o "$f" "$u" && ls -la "$f" || echo "FALHOU $u"
           done
