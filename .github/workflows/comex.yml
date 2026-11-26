@@ -14,6 +14,17 @@ jobs:
         env: { P: '${{ inputs.prefixo }}', A: '${{ inputs.anos }}' }
         run: |
           mkdir -p out
+          # o servidor não envia o certificado intermediário: busca-o pelo AIA e verifica normalmente
+          H=balanca.economia.gov.br
+          echo | openssl s_client -connect $H:443 -servername $H 2>/dev/null | openssl x509 -outform PEM > leaf.pem
+          AIA=$(openssl x509 -in leaf.pem -noout -text | grep -oP 'CA Issuers - URI:\K\S+' | head -1); echo "AIA=$AIA"
+          curl -fsSL "$AIA" -o inter.bin && (openssl x509 -inform DER -in inter.bin -out inter.pem 2>/dev/null || cp inter.bin inter.pem)
+          AIA2=$(openssl x509 -in inter.pem -noout -text | grep -oP 'CA Issuers - URI:\K\S+' | head -1); echo "AIA2=$AIA2"
+          [ -n "$AIA2" ] && curl -fsSL "$AIA2" -o inter2.bin && (openssl x509 -inform DER -in inter2.bin -out inter2.pem 2>/dev/null || cp inter2.bin inter2.pem) || touch inter2.pem
+          cat /etc/ssl/certs/ca-certificates.crt inter.pem inter2.pem > bundle.pem
+          export CURL_CA_BUNDLE=$PWD/bundle.pem
+          # também tenta a API (POST)
+          curl -fsS --retry 2 -X POST -H 'Content-Type: application/json' -d '{"flow":"export","monthDetail":false,"period":{"from":"2015-01","to":"2026-10"},"filters":[{"filter":"ncm","values":["03061100","03063100","03069100","03061200","03063200","03069200","03061400","03063300","03069300"]}],"details":["country","state","ncm"],"metrics":["metricFOB","metricKG"]}' https://api-comexstat.mdic.gov.br/general -o out/api_export.json || echo "FALHOU api"
           for fl in EXP IMP; do
             for y in $A; do
               u="https://balanca.economia.gov.br/balanca/bd/comexstat-bd/ncm/${fl}_${y}.csv"
